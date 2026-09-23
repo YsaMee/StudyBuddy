@@ -1,3 +1,5 @@
+"""Journey step 4 & 7: Create a study plan, add tasks, track completion."""
+
 import streamlit as st
 from datetime import date, timedelta
 from ..models import Task
@@ -5,20 +7,25 @@ from ..priority import PriorityEngine
 
 
 def render(app):
-    st.title("Plans & Tasks")
+    st.title("🗓️ Plans & Tasks")
     st.caption("Turn big goals into small, doable steps.")
-    user = app.user
-    all_subjects = app.data.subjects
-    if not all_subjects:
-        st.info("No subjects are available yet.")
-        return
+    u = app.user
 
-    subject_name = st.selectbox("Subject", [subject.name for subject in all_subjects])
-    subject = next(subject for subject in all_subjects if subject.name == subject_name)
-    plan = user.plan_for(subject)
+    st.markdown("**Pick a subject** — this is where you add subjects; there's no separate list to set up in your profile.")
+    all_names = [s.name for s in app.data.subjects]
+    my_names = [s.name for s in u.subjects]
+    # subjects the user already has a plan for come first, for convenience
+    ordered_names = my_names + [n for n in all_names if n not in my_names]
+    subject_name = st.selectbox("Subject", ordered_names)
+    subject = next(s for s in app.data.subjects if s.name == subject_name)
+    plan = u.plan_for(subject)
+
     if plan is None:
-        user.select_subjects(user.subjects + [subject])
-        plan = user.plan_for(subject)
+        st.info(f"You haven't started a plan for **{subject.name}** yet.")
+        if st.button(f"+ Start a plan for {subject.name}"):
+            u.add_subject(subject)
+            st.rerun()
+        return
 
     with st.form("add_task_form"):
         title = st.text_input("Task")
@@ -29,20 +36,17 @@ def render(app):
             plan.add_task(Task(title, deadline, difficulty, goal))
             st.success(f"Added task '{title}'.")
 
-    st.subheader(f"{subject.name} — {int(plan.progress() * 100)}% complete")
+    st.subheader(f"{subject.name} — {int(plan.progress()*100)}% complete")
     st.progress(plan.progress())
 
     st.markdown("**Task list** · sorted by smart priority")
-    sorted_tasks = sorted(plan.tasks, key=PriorityEngine.task_score, reverse=True)
-    for task in sorted_tasks:
+    sorted_tasks = sorted(plan.tasks, key=lambda t: PriorityEngine.task_score(t), reverse=True)
+    for t in sorted_tasks:
         with st.container(border=True):
-            column1, column2, column3 = st.columns([3, 1, 1])
-            column1.write(
-                f"{task.status_icon()} **{task.title}**  \n"
-                f"{task.difficulty} · due {task.deadline}"
-                + (f" · {task.goal}" if task.goal else "")
-            )
-            column2.write(str(PriorityEngine.task_score(task)) if not task.completed else "-")
-            if not task.completed and column3.button("Complete", key=f"complete_{task.id}"):
-                task.mark_complete()
+            c1, c2, c3 = st.columns([3, 1, 1])
+            c1.write(f"{t.status_icon()} **{t.title}**  \n{t.difficulty} · due {t.deadline}"
+                     + (f" · {t.goal}" if t.goal else ""))
+            c2.write(f"{PriorityEngine.task_score(t)}" if not t.completed else "—")
+            if not t.completed and c3.button("Complete", key=f"complete_{t.id}"):
+                t.mark_complete()
                 st.rerun()

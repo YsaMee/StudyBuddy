@@ -1,3 +1,10 @@
+"""
+PriorityEngine — recommends which subject/task a student should focus on
+next, based on deadline proximity, task difficulty, and how little progress
+has been made. Kept separate from the data model and the UI so the scoring
+rule can be changed without touching either.
+"""
+
 from typing import List, Tuple, Dict
 from .models import Task, StudyPlan, Subject
 

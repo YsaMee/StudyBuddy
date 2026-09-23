@@ -1,3 +1,9 @@
+"""Journey step 8: View study progress and recommended resources/sessions.
+
+Also hosts the Smart Priority feature (PriorityEngine) that recommends
+which subject/task to focus on next.
+"""
+
 import streamlit as st
 from ..priority import PriorityEngine
 

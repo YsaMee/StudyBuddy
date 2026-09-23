@@ -7,20 +7,11 @@ def render(app):
     tab_login, tab_register = st.tabs(["Log In", "Register"])
 
     with tab_login:
-        email = st.text_input(
-            "Email",
-            value=st.session_state.get("remembered_email", ""),
-            key="login_email",
-        )
+        email = st.text_input("Email", key="login_email")
         password = st.text_input("Password", type="password", key="login_pass")
-        remember_email = st.checkbox("Remember my email", key="remember_email")
         if st.button("Log In"):
             user = app.data.find_user(email)
             if user and user.check_password(password):
-                if remember_email:
-                    st.session_state.remembered_email = email.strip().lower()
-                else:
-                    st.session_state.pop("remembered_email", None)
                 st.session_state.current_user = user
                 app.data.seed_demo_classmates()
                 app.data.seed_demo_session(user)

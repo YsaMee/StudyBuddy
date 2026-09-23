@@ -1,19 +1,24 @@
+"""
+StudyBuddyApp — the application controller. Owns session state, shared
+data, and routes to the right page module for the current step of the
+User Journey.
+"""
+
 import streamlit as st
 from typing import Optional
 from .data import StudyBuddyData
-from .data import User
-from .pages import welcome, auth, profile, dashboard, study_plans, resource, sessions
+from .models import User
+from .pages import welcome, profile, dashboard, study_plans, resources, sessions
 
 
 class StudyBuddyApp:
 
     PAGES = {
         "welcome": welcome,
-        "auth": auth,
         "profile": profile,
         "dashboard": dashboard,
         "study_plans": study_plans,
-        "resources": resource,
+        "resources": resources,
         "sessions": sessions,
     }
 
@@ -70,9 +75,9 @@ class StudyBuddyApp:
         self.sidebar_nav()
 
         page = st.session_state.page
-        if page not in ("welcome", "auth") and not self.user:
+        if page != "welcome" and not self.user:
             st.warning("Please log in first.")
-            page = "auth"
+            page = "welcome"
             st.session_state.page = page
 
         self.PAGES[page].render(self)

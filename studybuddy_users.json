@@ -1,0 +1,38 @@
+[
+  {
+    "email": "jrRoyo@mcm.edu.ph",
+    "password": "cddvdfsbs25\\37!Q",
+    "full_name": "jrRoyo",
+    "academic_year": "Year 1",
+    "school": "Mapua Malayan Colleges Mindanao",
+    "program": "BS Computer Science (BSCS)",
+    "study_goal": ""
+  },
+  {
+    "email": "maya.chen@stateu.edu",
+    "password": "Password1",
+    "full_name": "Maya Chen",
+    "academic_year": "Year 1",
+    "school": "State University",
+    "program": "BS Computer Science (BSCS)",
+    "study_goal": ""
+  },
+  {
+    "email": "jordan.lee@stateu.edu",
+    "password": "Password1",
+    "full_name": "Jordan Lee",
+    "academic_year": "Year 1",
+    "school": "State University",
+    "program": "BS Business Administration (BSBA) \u2013 Financial Management",
+    "study_goal": ""
+  },
+  {
+    "email": "sam.rivera@citytech.edu",
+    "password": "Password1",
+    "full_name": "Sam Rivera",
+    "academic_year": "Year 1",
+    "school": "City Tech",
+    "program": "BS Computer Science (BSCS)",
+    "study_goal": ""
+  }
+]

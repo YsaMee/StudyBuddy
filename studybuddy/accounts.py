@@ -1,3 +1,15 @@
+"""
+Accounts — validation rules for real-style (email + password) sign-up.
+Kept separate from both storage (data.py) and the model (models.py) so the
+rules themselves (what counts as a valid email/password) can be changed or
+tightened without touching how a User is stored or rendered.
+
+Note: this is prototype-level validation only (format + strength checks).
+It does not hash passwords or provide real security — that's out of scope
+for this course project, but the separation here is where that would plug
+in later (e.g. swapping check_password for a hashed comparison).
+"""
+
 import re
 
 EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
